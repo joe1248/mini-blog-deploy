@@ -1,0 +1,32 @@
+version: "3"
+services:
+  blog_back_end:
+    image: joseph1248/mini-blog-be:latest
+    restart: always
+    ports:
+      - "81:80"
+    networks:
+      - net
+    depends_on:
+      - redis_database_server
+
+  redis_database_server:
+    image: redis:latest
+    command: redis-server
+    volumes:
+      - ../redis-data:/var/lib/redis
+    networks:
+      - net
+
+  blog_front_end:
+    image: joseph1248/mini-blog-vue-img:latest
+    ports:
+      - "80:80"
+    networks:
+      - net
+    depends_on:
+      - blog_back_end
+      
+networks:
+  net:
+    driver: bridge
